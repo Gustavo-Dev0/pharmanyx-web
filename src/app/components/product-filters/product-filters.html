@@ -1,0 +1,59 @@
+<div class="flex items-center gap-4 mb-6">
+  <!-- Search -->
+  <div class="relative w-full max-w-sm">
+    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-light-secondary dark:text-text-dark-secondary">search</span>
+    <input
+      [(ngModel)]="query"
+      (ngModelChange)="onInputChange()"
+      class="w-full h-10 pl-10 pr-4 rounded-DEFAULT bg-content-light dark:bg-content-dark border border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary placeholder:text-text-light-secondary dark:placeholder:text-text-dark-secondary focus:outline-none focus:ring-2 focus:ring-primary"
+      placeholder="Search by name, category, or supplier"
+      type="text"
+    />
+  </div>
+
+  <!-- Category -->
+  <select
+    [(ngModel)]="category"
+    (ngModelChange)="onInputChange()"
+    class="h-10 px-4 rounded-DEFAULT border border-border-light dark:border-border-dark bg-content-light dark:bg-content-dark text-sm text-text-light-secondary dark:text-text-dark-secondary"
+  >
+    <option value="any">All categories</option>
+    <option value="Analgesics">Analgesics</option>
+    <option value="Antibiotics">Antibiotics</option>
+    <option value="Antihistamines">Antihistamines</option>
+    <option value="Vitamins">Vitamins</option>
+    <!-- agregar dinámicamente desde un servicio si se desea -->
+  </select>
+
+  <!-- Supplier -->
+  <select
+    [(ngModel)]="supplier"
+    (ngModelChange)="onInputChange()"
+    class="h-10 px-4 rounded-DEFAULT border border-border-light dark:border-border-dark bg-content-light dark:bg-content-dark text-sm text-text-light-secondary dark:text-text-dark-secondary"
+  >
+    <option value="any">All suppliers</option>
+    <option value="MediCorp">MediCorp</option>
+    <option value="HealthPlus">HealthPlus</option>
+    <option value="AllergoMed">AllergoMed</option>
+    <option value="VitaLife">VitaLife</option>
+    <!-- igualmente, poblar desde el backend es recomendable -->
+  </select>
+
+  <!-- Stock Status -->
+  <select
+    [(ngModel)]="stockStatus"
+    (ngModelChange)="onInputChange()"
+    class="h-10 px-4 rounded-DEFAULT border border-border-light dark:border-border-dark bg-content-light dark:bg-content-dark text-sm text-text-light-secondary dark:text-text-dark-secondary"
+  >
+    <option value="any">Any stock</option>
+    <option value="in_stock">In stock (&gt;50)</option>
+    <option value="low">Low (&lt;=20)</option>
+    <option value="out">Out of stock (0)</option>
+  </select>
+
+  <!-- Actions -->
+  <div class="flex items-center gap-2">
+    <button (click)="applyNow()" class="h-10 px-4 rounded-DEFAULT bg-primary text-white text-sm">Apply</button>
+    <button (click)="reset()" class="h-10 px-4 rounded-DEFAULT border border-border-light dark:border-border-dark bg-content-light dark:bg-content-dark text-sm text-text-light-secondary">Reset</button>
+  </div>
+</div>

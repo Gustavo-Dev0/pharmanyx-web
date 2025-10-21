@@ -1,0 +1,31 @@
+<aside
+  class="w-64 bg-background-light dark:bg-background-dark border-r border-border-light dark:border-border-dark flex flex-col">
+  <div class="flex items-center gap-2 h-16 px-6 border-b border-border-light dark:border-border-dark">
+    <div class="text-primary size-7">
+      <svg fill="none" viewBox="0 0 48 48">
+        <path
+          d="M4 42.4379C4 42.4379 14.0962 36.0744 24 41.1692C35.0664 46.8624 44 42.2078 44 42.2078L44 7.01134C44 7.01134 35.068 11.6577 24.0031 5.96913C14.0971 0.876274 4 7.27094 4 7.27094L4 42.4379Z"
+          fill="currentColor" />
+      </svg>
+    </div>
+    <h1 class="text-xl font-bold text-text-light-primary dark:text-text-dark-primary">PharmaChain</h1>
+  </div>
+
+  <nav class="flex-1 px-4 py-6 space-y-2">
+    @for (item of navItems(); track item) {
+    <a [routerLink]="item.path" routerLinkActive="bg-primary/10 text-primary" #rla="routerLinkActive"
+      [routerLinkActiveOptions]="{ exact: item.path === '' }" [ngClass]="{
+        'text-text-light-secondary dark:text-text-dark-secondary hover:bg-primary/10 hover:text-text-light-primary dark:hover:text-dark-primary': !rla.isActive
+      }" class="flex items-center gap-3 px-4 py-2 text-sm font-medium rounded-DEFAULT cursor-pointer">
+      <span class="material-symbols-outlined">{{ item.icon }}</span>
+      {{ item.label }}
+    </a>
+    }
+  </nav>
+
+  <div class="px-4 py-6">
+    <p class="text-xs text-text-light-secondary dark:text-text-dark-secondary text-center">
+      © 2025 PharmaChain. All rights reserved.
+    </p>
+  </div>
+</aside>
