@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { ProductFilters } from "../../../../components/product-filters/product-filters";
 import { ProductTable } from "../../../../components/product-table/product-table";
-import { Button } from "../../../../shared/button/button";
+import { Button } from "../../../../shared/components/button/button";
+import { Dialog } from '../../../../core/services/dialog';
+import { ProductFormComponent } from '../../components/product-form/product-form.component';
 
 @Component({
   selector: 'app-product-list',
@@ -11,8 +13,10 @@ import { Button } from "../../../../shared/button/button";
 })
 export class ProductList {
 
+  constructor(private dialog: Dialog) {}
+
   onAddProduct() {
-    // Aquí podrías abrir un modal, redirigir a un formulario, etc.
-    console.log('Add Product clicked!');
+
+    this.dialog.open(ProductFormComponent, "Add Product");
   }
 }
