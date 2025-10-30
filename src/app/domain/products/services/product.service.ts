@@ -4,11 +4,11 @@ import { Observable } from 'rxjs';
 import { Product } from '../models/product.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProductService {
   private http = inject(HttpClient);
-  private baseUrl = '/api/products';
+  private baseUrl = 'http://localhost:8080/products';
 
   getAll(): Observable<Product[]> {
     return this.http.get<Product[]>(this.baseUrl);

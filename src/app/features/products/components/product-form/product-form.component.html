@@ -19,8 +19,8 @@
       }
 
       @case ('checkbox') {
-      <input class="h-4 w-4 rounded border-border-light dark:border-border-dark text-primary focus:ring-primary"
-        [formControlName]="field.name" [type]="field.type" />
+      <input class="h-5 w-5 rounded border-border-light dark:border-border-dark text-primary focus:ring-primary"
+        [formControlName]="field.name" type="checkbox" />
       }
 
       @case ('text') {
@@ -36,6 +36,13 @@
       }
 
       }
+      @if (addProductForm.get(field.name)?.invalid && addProductForm.get(field.name)?.touched) {
+      <div class="mt-1 text-sm text-red-600 dark:text-red-500">
+        @if (addProductForm.get(field.name)?.hasError('required')) {
+        <div> {{ field.label }} is required. </div>
+        }
+      </div>
+      }
     </div>
     }
     }
@@ -44,330 +51,156 @@
 
   <div class="pt-4 border-t border-border-light dark:border-border-dark">
     <h4 class="text-lg font-semibold text-text-light-primary dark:text-text-dark-primary mb-4">
-      {{presentationsField()?.label}}</h4>
-    <div [formArrayName]="presentationsField()!.name" class="space-y-4">
-      @for (ctrl of presentationsArray.controls; let i = $index; track ctrl) {
-      <div [formGroupName]="i"
-        class="p-4 rounded-lg border border-border-light dark:border-border-dark grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
-        <div class="md:col-span-2">
-          <label class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary">Description</label>
-          <input formControlName="description" placeholder="Description"
-            class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary"
-            placeholder="e.g., Box of 30 tablets" type="text" />
-        </div>
+      ¿Cómo viene este medicamento? *
+    </h4>
 
-        <div>
-          <label class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary">Factor</label>
-          <input formControlName="factor" placeholder="Factor"
-            class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary"
-            placeholder="e.g. 10" type="number" />
-        </div>
-        <div>
-          <label class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary">Sale
-            Price</label>
-          <input formControlName="salePrice" placeholder="Sale Price"
-            class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary"
-            placeholder="e.g. 6.99" type="number" />
-        </div>
-
-        <button type="button" (click)="removePresentation(i)" class="bg-red-500 text-white px-2 rounded">
-          ✕
-        </button>
-      </div>
-      }
-    </div>
-    <button (click)="addPresentation()"
-      class="mt-4 flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/90">
-      <span class="material-symbols-outlined text-base">add_circle</span>
-      Add another presentation
-    </button>
-  </div>
-
-
-
-  <!-- <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div>
-      <label class="block text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary"
-        for="product-code">Code</label>
-      <input
-        class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary"
-        id="product-code" placeholder="Enter product code" type="text" />
-    </div>
-    <div>
-      <label class="block text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary"
-        for="product-name">Name</label>
-      <input
-        class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary"
-        id="product-name" placeholder="Enter product name" type="text" />
-    </div>
-  </div>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div>
-      <label class="block text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary"
-        for="laboratory">Laboratory</label>
-      <input
-        class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary"
-        id="laboratory" placeholder="Enter laboratory name" type="text" />
-    </div>
-    <div>
-      <label class="block text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary"
-        for="sanitary-registration">Sanitary Registration</label>
-      <input
-        class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary"
-        id="sanitary-registration" placeholder="Enter sanitary registration" type="text" />
-    </div>
-  </div>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div>
-      <label class="block text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary"
-        for="purchase-price">Purchase Price</label>
-      <input
-        class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary"
-        id="purchase-price" placeholder="Enter purchase price" type="number" />
-    </div>
-    <div class="flex items-center gap-4">
-      <input class="h-4 w-4 rounded border-border-light dark:border-border-dark text-primary focus:ring-primary"
-        id="requires-prescription" type="checkbox" />
-      <label class="text-sm font-medium text-text-light-primary dark:text-text-dark-primary"
-        for="requires-prescription">Requires Prescription</label>
-    </div>
-  </div>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-    <div>
-      <label class="block text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary"
-        for="status">Status</label>
-      <select
-        class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary"
-        id="status">
-        <option>Active</option>
-        <option>Inactive</option>
-      </select>
-    </div>
-  </div>
-  <div class="pt-4 border-t border-border-light dark:border-border-dark">
-    <h4 class="text-lg font-semibold text-text-light-primary dark:text-text-dark-primary mb-4">Product
-      Presentations</h4>
     <div class="space-y-4">
-      <div
-        class="p-4 rounded-lg border border-border-light dark:border-border-dark grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+      @for ( presentation of presentationOptions; track presentation.value) {
+      <label
+        class="flex items-start p-2 rounded-DEFAULT border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark cursor-pointer hover:border-primary transition-colors">
+        <input type="radio" name="tipoPresentacion" [checked]="presentationType() === presentation.value"
+          (change)="changedPresentationType(presentation.value)"
+          class="mt-1 h-4 w-4 rounded border-border-light dark:border-border-dark text-primary focus:ring-primary mr-3" />
+        <div class="font-medium text-text-light-primary dark:text-text-dark-primary">
+          {{ presentation.label }}
+        </div>
+      </label>
+      }
+
+    </div>
+  </div>
+
+
+  <div class="pt-4 border-t border-border-light dark:border-border-dark">
+    <h4 class="text-lg font-semibold text-text-light-primary dark:text-text-dark-primary mb-4">
+      Presentations sale {{ presentationType() }} </h4>
+    <div class="space-y-4">
+      @if (presentationType() === 'BOX') {
+      <div formGroupName="box"
+        class="p-5 border border-border-light dark:border-border-dark bg-background-light/50 dark:bg-background-dark/50 grid grid-cols-1 md:grid-cols-5 gap-6 items-center shadow-sm transition-colors duration-300">
+
+        <h3 class="text-lg font-semibold text-text-light-primary dark:text-text-dark-primary mb-4 md:col-span-4">
+          Box</h3>
+
+        <!-- Allow Sale -->
+        <div class="flex items-center gap-3 md:col-span-1">
+          <input formControlName="enabled" id="allow-sale" type="checkbox"
+            class="h-5 w-5 rounded accent-primary cursor-pointer border-border-light dark:border-border-dark text-primary focus:ring-primary" />
+          <label for="allow-sale"
+            class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary cursor-pointer select-none">
+            Allow Sale
+          </label>
+        </div>
+
+        @if ( addProductForm.get('box')?.get('enabled')?.value ) {
+        <!-- Price -->
         <div class="md:col-span-2">
-          <label class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary">Description</label>
-          <input
-            class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary"
-            placeholder="e.g., Box of 30 tablets" type="text" value="Box of 30 tablets" />
+
+          <label class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary mb-1 block">
+            Price
+          </label>
+          <input formControlName="price" type="number" placeholder="Enter price"
+            class="block w-full border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-light-primary dark:text-text-dark-primary focus:ring-2 focus:ring-primary/70 focus:border-primary outline-none px-3 py-2 transition-all" />
         </div>
-        <div>
-          <label class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary">Factor</label>
-          <input
-            class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary"
-            placeholder="e.g. 30" type="number" value="30" />
-        </div>
-        <div>
-          <label class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary">Sale
-            Price</label>
-          <input
-            class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary"
-            placeholder="e.g. 15.99" type="number" value="15.99" />
-        </div>
-        <div class="flex items-center gap-2">
-          <select
-            class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary">
-            <option>Active</option>
-            <option>Inactive</option>
-          </select>
-          <button
-            class="p-2 rounded-DEFAULT text-text-light-secondary dark:text-text-dark-secondary hover:bg-red-500/10 hover:text-red-500">
-            <span class="material-symbols-outlined text-base">delete</span>
-          </button>
-        </div>
+        }
+
       </div>
-      <div
-        class="p-4 rounded-lg border border-border-light dark:border-border-dark grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
+
+      }
+
+      @if ( presentationType() === 'BLISTERPACK' || presentationType() === 'BOX') {
+
+      <div formGroupName="blisterPacks"
+        class="p-5 border border-border-light dark:border-border-dark bg-background-light/50 dark:bg-background-dark/50 grid grid-cols-1 md:grid-cols-5 gap-6 items-center shadow-sm transition-colors duration-300">
+
+        <h3 class="text-lg font-semibold text-text-light-primary dark:text-text-dark-primary mb-4 md:col-span-4">
+          BlistersPacks</h3>
+
+        <!-- Allow Sale -->
+        <div class="flex items-center gap-3 md:col-span-1">
+          <input formControlName="enabled" id="allow-sale" type="checkbox"
+            class="h-5 w-5 rounded accent-primary cursor-pointer border-border-light dark:border-border-dark text-primary focus:ring-primary" />
+          <label for="allow-sale"
+            class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary cursor-pointer select-none">
+            Allow Sale
+          </label>
+        </div>
+
+        @if ( addProductForm.get('blisterPacks')?.get('enabled')?.value ) {
+
+        <!-- BlisterPacksByBox -->
         <div class="md:col-span-2">
-          <label class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary">Description</label>
-          <input
-            class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary"
-            placeholder="e.g., Blister of 10 tablets" type="text" value="Blister of 10 tablets" />
+
+          <label class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary mb-1 block">
+            Blister Pack By Box
+          </label>
+          <input formControlName="blisterPackByBox" type="number" placeholder="Enter blister pack by box"
+            class="block w-full border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-light-primary dark:text-text-dark-primary focus:ring-2 focus:ring-primary/70 focus:border-primary outline-none px-3 py-2 transition-all" />
         </div>
-        <div>
-          <label class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary">Factor</label>
-          <input
-            class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary"
-            placeholder="e.g. 10" type="number" value="10" />
+
+        <!-- Price -->
+        <div class="md:col-span-2">
+          <label class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary mb-1 block">
+            Price
+          </label>
+          <input formControlName="price" type="number" placeholder="Enter price"
+            class="block w-full border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-light-primary dark:text-text-dark-primary focus:ring-2 focus:ring-primary/70 focus:border-primary outline-none px-3 py-2 transition-all" />
         </div>
-        <div>
-          <label class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary">Sale
-            Price</label>
-          <input
-            class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary"
-            placeholder="e.g. 6.99" type="number" value="6.99" />
+        }
+
+      </div>
+
+      }
+
+      <div formGroupName="units"
+        class="p-5 border border-border-light dark:border-border-dark bg-background-light/50 dark:bg-background-dark/50 grid grid-cols-1 md:grid-cols-5 gap-6 items-center shadow-sm transition-colors duration-300">
+
+        <h3 class="text-lg font-semibold text-text-light-primary dark:text-text-dark-primary mb-4 md:col-span-4">
+          Units</h3>
+
+        <!-- Allow Sale -->
+        <div class="flex items-center gap-3 md:col-span-1">
+          <input formControlName="enabled" id="allow-sale" type="checkbox"
+            class="h-5 w-5 rounded accent-primary cursor-pointer border-border-light dark:border-border-dark text-primary focus:ring-primary" />
+          <label for="allow-sale"
+            class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary cursor-pointer select-none">
+            Allow Sale
+          </label>
         </div>
-        <div class="flex items-center gap-2">
-          <select
-            class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary">
-            <option>Active</option>
-            <option>Inactive</option>
-          </select>
-          <button
-            class="p-2 rounded-DEFAULT text-text-light-secondary dark:text-text-dark-secondary hover:bg-red-500/10 hover:text-red-500">
-            <span class="material-symbols-outlined text-base">delete</span>
-          </button>
+
+        @if ( addProductForm.get('units')?.get('enabled')?.value ) {
+
+        <!-- Unit By -->
+        <div class="md:col-span-2">
+
+          <label class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary mb-1 block">
+            Unit By
+          </label>
+          <input formControlName="unitBy" type="number" placeholder="Enter unit by"
+            class="block w-full border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-light-primary dark:text-text-dark-primary focus:ring-2 focus:ring-primary/70 focus:border-primary outline-none px-3 py-2 transition-all" />
         </div>
+
+
+        <!-- Price -->
+        <div class="md:col-span-2">
+          <label class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary mb-1 block">
+            Price
+          </label>
+          <input formControlName="price" type="number" placeholder="Enter price"
+            class="block w-full border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-light-primary dark:text-text-dark-primary focus:ring-2 focus:ring-primary/70 focus:border-primary outline-none px-3 py-2 transition-all" />
+        </div>
+        }
+
       </div>
     </div>
-    <button class="mt-4 flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/90">
-      <span class="material-symbols-outlined text-base">add_circle</span>
-      Add another presentation
-    </button>
-  </div> -->
+  </div>
+
 </form>
 
-<!--
-
-<div class="flex-1 overflow-y-auto p-6 space-y-6">
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div>
-      <label class="block text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary"
-        for="product-id">Product ID</label>
-      <input
-        class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary"
-        id="product-id" readonly="" type="text" value="PROD-00123" />
-    </div>
-    <div>
-      <label class="block text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary"
-        for="product-code">Code</label>
-      <input
-        class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary"
-        id="product-code" placeholder="Enter product code" type="text" />
-    </div>
-  </div>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div>
-      <label class="block text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary"
-        for="product-name">Name</label>
-      <input
-        class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary"
-        id="product-name" placeholder="Enter product name" type="text" />
-    </div>
-    <div>
-      <label class="block text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary"
-        for="laboratory">Laboratory</label>
-      <input
-        class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary"
-        id="laboratory" placeholder="Enter laboratory name" type="text" />
-    </div>
-  </div>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-    <div>
-      <label class="block text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary"
-        for="sanitary-registration">Sanitary Registration</label>
-      <input
-        class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary"
-        id="sanitary-registration" placeholder="Enter sanitary registration" type="text" />
-    </div>
-    <div>
-      <label class="block text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary"
-        for="purchase-price">Purchase Price</label>
-      <input
-        class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary"
-        id="purchase-price" placeholder="Enter purchase price" type="number" />
-    </div>
-  </div>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
-    <div class="flex items-center gap-4">
-      <input class="h-4 w-4 rounded border-border-light dark:border-border-dark text-primary focus:ring-primary"
-        id="requires-prescription" type="checkbox" />
-      <label class="text-sm font-medium text-text-light-primary dark:text-text-dark-primary"
-        for="requires-prescription">Requires Prescription</label>
-    </div>
-    <div>
-      <label class="block text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary"
-        for="status">Status</label>
-      <select
-        class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary"
-        id="status">
-        <option>Active</option>
-        <option>Inactive</option>
-      </select>
-    </div>
-  </div>
-  <div class="pt-4 border-t border-border-light dark:border-border-dark">
-    <h4 class="text-lg font-semibold text-text-light-primary dark:text-text-dark-primary mb-4">Product
-      Presentations</h4>
-    <div class="space-y-4">
-      <div
-        class="p-4 rounded-lg border border-border-light dark:border-border-dark grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
-        <div class="md:col-span-2">
-          <label class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary">Description</label>
-          <input
-            class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary"
-            placeholder="e.g., Box of 30 tablets" type="text" value="Box of 30 tablets" />
-        </div>
-        <div>
-          <label class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary">Factor</label>
-          <input
-            class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary"
-            placeholder="e.g. 30" type="number" value="30" />
-        </div>
-        <div>
-          <label class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary">Sale
-            Price</label>
-          <input
-            class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary"
-            placeholder="e.g. 15.99" type="number" value="15.99" />
-        </div>
-        <div class="flex items-center gap-2">
-          <select
-            class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary">
-            <option>Active</option>
-            <option>Inactive</option>
-          </select>
-          <button
-            class="p-2 rounded-DEFAULT text-text-light-secondary dark:text-text-dark-secondary hover:bg-red-500/10 hover:text-red-500">
-            <span class="material-symbols-outlined text-base">delete</span>
-          </button>
-        </div>
-      </div>
-      <div
-        class="p-4 rounded-lg border border-border-light dark:border-border-dark grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
-        <div class="md:col-span-2">
-          <label class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary">Description</label>
-          <input
-            class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary"
-            placeholder="e.g., Blister of 10 tablets" type="text" value="Blister of 10 tablets" />
-        </div>
-        <div>
-          <label class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary">Factor</label>
-          <input
-            class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary"
-            placeholder="e.g. 10" type="number" value="10" />
-        </div>
-        <div>
-          <label class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary">Sale
-            Price</label>
-          <input
-            class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary"
-            placeholder="e.g. 6.99" type="number" value="6.99" />
-        </div>
-        <div class="flex items-center gap-2">
-          <select
-            class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary">
-            <option>Active</option>
-            <option>Inactive</option>
-          </select>
-          <button
-            class="p-2 rounded-DEFAULT text-text-light-secondary dark:text-text-dark-secondary hover:bg-red-500/10 hover:text-red-500">
-            <span class="material-symbols-outlined text-base">delete</span>
-          </button>
-        </div>
-      </div>
-    </div>
-    <button class="mt-4 flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/90">
-      <span class="material-symbols-outlined text-base">add_circle</span>
-      Add another presentation
-    </button>
-  </div>
+<div class="flex justify-end gap-4 p-6 border-t border-border-light dark:border-border-dark">
+  <button
+    class="px-4 py-2 text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary rounded-DEFAULT border border-border-light dark:border-border-dark hover:bg-primary/10">Cancel</button>
+  <button class="px-4 py-2 text-sm font-medium text-white bg-primary rounded-DEFAULT hover:bg-primary/90"
+    (click)="onSubmit()">Save
+    Product</button>
 </div>
-
-
--->

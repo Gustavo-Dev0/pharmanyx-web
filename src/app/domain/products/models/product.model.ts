@@ -1,9 +1,10 @@
 export type ProductPresentation = {
   id?: number;
-  description: string;
+  description?: string;
+  type: string;
   conversionFactor: number;
   salePrice: number;
-  status: string;
+  allowsSale: string;
 }
 
 export type Product = {
@@ -13,7 +14,7 @@ export type Product = {
   laboratory: string;
   sanitaryRegistration: string;
   purchasePrice: number;
-  requirePrescription: boolean;
+  requiresPrescription: boolean;
   status: string;
   presentations: ProductPresentation[];
   createdAt?: Date;

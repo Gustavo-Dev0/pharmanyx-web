@@ -1,5 +1,12 @@
 import { Component, output, signal } from '@angular/core';
 
+
+export interface ResultModal {
+  success: boolean;
+  data?: any;
+  reason?: string;
+}
+
 @Component({
   selector: 'app-modal',
   imports: [],
@@ -7,12 +14,13 @@ import { Component, output, signal } from '@angular/core';
   styleUrl: './modal.css'
 })
 export class Modal {
-  close = output<void>();
+  close = output<ResultModal>();
   title = signal<string>('');
 
 
-  onClose() {
-    this.close.emit();
+  onClose(result: ResultModal) {
+    console.log(result);
+    this.close.emit(result);
   }
 }
 

@@ -1,33 +1,39 @@
-<div class="bg-content-light dark:bg-content-dark rounded-lg border border-border-light dark:border-border-dark overflow-hidden">
+<div
+  class="bg-content-light dark:bg-content-dark rounded-lg border border-border-light dark:border-border-dark overflow-hidden">
   <table class="w-full text-sm">
     <thead class="bg-background-light dark:bg-background-dark">
       <tr>
-        <th *ngFor="let head of ['Product Name','Category','Supplier','Stock Level','Price','Actions']"
-            class="px-6 py-3 text-left font-medium text-text-light-secondary dark:text-text-dark-secondary tracking-wider">
+        @for (head of tableHeaders; track head) {
+        <th
+          class="px-6 py-3 text-left font-medium text-text-light-secondary dark:text-text-dark-secondary tracking-wider">
           {{ head }}
         </th>
+        }
       </tr>
     </thead>
     <tbody class="divide-y divide-border-light dark:divide-border-dark">
-      <tr *ngFor="let product of products()"
-          class="hover:bg-background-light dark:hover:bg-background-dark">
-        <td class="px-6 py-4 font-medium text-text-light-primary dark:text-text-dark-primary">{{ product.name }}</td>
-        <td class="px-6 py-4 text-text-light-secondary dark:text-text-dark-secondary">{{ product.category }}</td>
-        <td class="px-6 py-4 text-text-light-secondary dark:text-text-dark-secondary">{{ product.supplier }}</td>
-        <td class="px-6 py-4">
+      @for ( product of productsList(); track product.id ) {
+      <tr class="hover:bg-background-light dark:hover:bg-background-dark">
+        <td class="px-6 py-4 font-medium text-text-light-primary dark:text-text-dark-primary">{{ product.code }}</td>
+        <td class="px-6 py-4 text-text-light-secondary dark:text-text-dark-secondary">{{ product.name }}</td>
+        <td class="px-6 py-4 text-text-light-secondary dark:text-text-dark-secondary">{{ product.laboratory }}</td>
+        <td class="px-6 py-4 text-text-light-secondary dark:text-text-dark-secondary">{{ product.sanitaryRegistration }}</td>
+        <!-- <td class="px-6 py-4">
           <div class="flex items-center gap-3">
             <div class="w-24 h-1.5 bg-border-light dark:bg-border-dark rounded-full">
               <div class="h-1.5 rounded-full bg-primary" [style.width.%]="product.stock"></div>
             </div>
             <span class="font-medium text-text-light-primary dark:text-text-dark-primary">{{ product.stock }}</span>
           </div>
-        </td>
-        <td class="px-6 py-4 text-text-light-secondary dark:text-text-dark-secondary">${{ product.price }}</td>
+        </td> -->
+        <td class="px-6 py-4 text-text-light-secondary dark:text-text-dark-secondary">${{ product.purchasePrice }}</td>
+        <td class="px-6 py-4 text-text-light-secondary dark:text-text-dark-secondary">{{ product.requiresPrescription ? 'Yes' : 'No' }}</td>
+
         <td class="px-6 py-4">
           <button class="font-medium text-primary hover:text-primary/80">View Details</button>
         </td>
       </tr>
+      }
     </tbody>
   </table>
 </div>
-
