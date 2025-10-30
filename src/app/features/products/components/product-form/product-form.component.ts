@@ -1,5 +1,5 @@
 import { Component, computed, input, signal } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { Product } from '../../../../domain/products/models/product.model';
 import { ProductService } from '../../../../domain/products/services/product.service';
 import { ResultModal } from '../../../../shared/components/modal/modal';
@@ -248,32 +248,11 @@ export class ProductFormComponent {
     this.presentationType.set(type);
   }
 
-  presentationValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
-    const box = control.get('box');
-    const blisterPacks = control.get('blisterPacks');
-    const units = control.get('units');
-
-    /* if (box?.get('enabled')?.value || blisterPacks?.get('enabled')?.value || units?.get('enabled')?.value) {
-
-    } else {
-      return { presentationValidator: true }
-    } */
-
-
-
-    if (box?.valid && blisterPacks?.valid && units?.valid) {
-      return null;
-    } else {
-      return { priceByPresentation: true };
-    }
-  }
-
 
   onSubmit() {
     console.log(this.addProductForm.value);
     this.addProductForm.markAllAsTouched();
     if (this.addProductForm.valid) {
-      console.log("VALIDO");
       console.log(this.addProductForm.value);
 
       const product: Product = {
@@ -342,13 +321,6 @@ export class ProductFormComponent {
         }
       });
 
-    } else {
-      console.log("NO VALIDO");
-      const closeFn = this.onClose();
-      if (closeFn) {
-        closeFn({ success: true });
-      }
     }
   }
 }
-

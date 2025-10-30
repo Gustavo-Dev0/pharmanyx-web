@@ -4,7 +4,7 @@ export type ProductPresentation = {
   type: string;
   conversionFactor: number;
   salePrice: number;
-  allowsSale: string;
+  allowsSale: boolean;
 }
 
 export type Product = {

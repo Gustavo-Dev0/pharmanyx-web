@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { provideZonelessChangeDetection } from '@angular/core';
 import { Button } from './button';
 
 describe('Button', () => {
@@ -8,7 +8,8 @@ describe('Button', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Button]
+      imports: [Button],
+      providers: [provideZonelessChangeDetection()]
     })
     .compileComponents();
 
