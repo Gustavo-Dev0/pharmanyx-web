@@ -3,7 +3,6 @@
   @for (group of fieldGroups(); track group) {
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     @for (field of group; track field.name) {
-    @if (field.type !== 'array') {
     <div>
       <label class="block text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary"
         [for]="field.name">{{field.label}}</label>
@@ -45,153 +44,65 @@
       }
     </div>
     }
-    }
   </div>
   }
 
   <div class="pt-4 border-t border-border-light dark:border-border-dark">
-    <h4 class="text-lg font-semibold text-text-light-primary dark:text-text-dark-primary mb-4">
-      ¿Cómo viene este medicamento? *
-    </h4>
-
-    <div class="space-y-4">
-      @for ( presentation of presentationOptions; track presentation.value) {
-      <label
-        class="flex items-start p-2 rounded-DEFAULT border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark cursor-pointer hover:border-primary transition-colors">
-        <input type="radio" name="tipoPresentacion" [checked]="presentationType() === presentation.value"
-          (change)="changedPresentationType(presentation.value)"
-          class="mt-1 h-4 w-4 rounded border-border-light dark:border-border-dark text-primary focus:ring-primary mr-3" />
-        <div class="font-medium text-text-light-primary dark:text-text-dark-primary">
-          {{ presentation.label }}
-        </div>
-      </label>
-      }
-
+    <div class="flex justify-between items-center mb-4">
+      <h4 class="text-lg font-semibold text-text-light-primary dark:text-text-dark-primary">
+        Presentations
+      </h4>
+      <button type="button" (click)="addPresentation()" class="px-3 py-1 text-sm font-medium text-white bg-primary rounded-DEFAULT hover:bg-primary/90">
+        Add Presentation
+      </button>
     </div>
-  </div>
 
+    <div formArrayName="presentations" class="space-y-4">
+      @for (presentation of presentations.controls; track presentation; let i = $index) {
+        <div [formGroupName]="$index" class="p-5 border border-border-light dark:border-border-dark bg-background-light/50 dark:bg-background-dark/50 grid grid-cols-1 md:grid-cols-3 gap-6 items-center shadow-sm transition-colors duration-300 relative">
 
-  <div class="pt-4 border-t border-border-light dark:border-border-dark">
-    <h4 class="text-lg font-semibold text-text-light-primary dark:text-text-dark-primary mb-4">
-      Presentations sale {{ presentationType() }} </h4>
-    <div class="space-y-4">
-      @if (presentationType() === 'BOX') {
-      <div formGroupName="box"
-        class="p-5 border border-border-light dark:border-border-dark bg-background-light/50 dark:bg-background-dark/50 grid grid-cols-1 md:grid-cols-5 gap-6 items-center shadow-sm transition-colors duration-300">
+          <div class="md:col-span-3 flex justify-between items-center">
+            <h3 class="text-lg font-semibold text-text-light-primary dark:text-text-dark-primary">Presentation #{{$index + 1}}</h3>
+            @if (presentations.length > 1) {
+              <button type="button" (click)="removePresentation(i)" class="text-red-500 hover:text-red-700">
+                Remove
+              </button>
+            }
+          </div>
 
-        <h3 class="text-lg font-semibold text-text-light-primary dark:text-text-dark-primary mb-4 md:col-span-4">
-          Box</h3>
+          <div>
+            <label class="block text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary">Type</label>
+            <select formControlName="type" class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary">
+              @for (opt of presentationOptions; track opt.value) {
+                <option [value]="opt.value">{{ opt.label }}</option>
+              }
+            </select>
+          </div>
 
-        <!-- Allow Sale -->
-        <div class="flex items-center gap-3 md:col-span-1">
-          <input formControlName="enabled" id="allow-sale" type="checkbox"
-            class="h-5 w-5 rounded accent-primary cursor-pointer border-border-light dark:border-border-dark text-primary focus:ring-primary" />
-          <label for="allow-sale"
-            class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary cursor-pointer select-none">
-            Allow Sale
-          </label>
+          <div>
+            <label class="block text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary">Description</label>
+            <input formControlName="description" type="text" placeholder="e.g., Caja, Blister" class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary" />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary">Conversion Factor</label>
+            <input formControlName="conversionFactor" type="number" placeholder="e.g., 10" class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary" />
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary">Sale Price</label>
+            <input formControlName="salePrice" type="number" placeholder="e.g., 25.50" class="mt-1 block w-full rounded-DEFAULT bg-background-light dark:bg-background-dark border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:ring-primary focus:border-primary" />
+          </div>
+
+          <div class="flex items-center gap-3">
+            <input formControlName="allowsSale" type="checkbox" class="h-5 w-5 rounded accent-primary cursor-pointer border-border-light dark:border-border-dark text-primary focus:ring-primary" />
+            <label class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary cursor-pointer select-none">
+              Allows Sale
+            </label>
+          </div>
+
         </div>
-
-        @if ( addProductForm.get('box')?.get('enabled')?.value ) {
-        <!-- Price -->
-        <div class="md:col-span-2">
-
-          <label class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary mb-1 block">
-            Price
-          </label>
-          <input formControlName="price" type="number" placeholder="Enter price"
-            class="block w-full border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-light-primary dark:text-text-dark-primary focus:ring-2 focus:ring-primary/70 focus:border-primary outline-none px-3 py-2 transition-all" />
-        </div>
-        }
-
-      </div>
-
       }
-
-      @if ( presentationType() === 'BLISTERPACK' || presentationType() === 'BOX') {
-
-      <div formGroupName="blisterPacks"
-        class="p-5 border border-border-light dark:border-border-dark bg-background-light/50 dark:bg-background-dark/50 grid grid-cols-1 md:grid-cols-5 gap-6 items-center shadow-sm transition-colors duration-300">
-
-        <h3 class="text-lg font-semibold text-text-light-primary dark:text-text-dark-primary mb-4 md:col-span-4">
-          BlistersPacks</h3>
-
-        <!-- Allow Sale -->
-        <div class="flex items-center gap-3 md:col-span-1">
-          <input formControlName="enabled" id="allow-sale" type="checkbox"
-            class="h-5 w-5 rounded accent-primary cursor-pointer border-border-light dark:border-border-dark text-primary focus:ring-primary" />
-          <label for="allow-sale"
-            class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary cursor-pointer select-none">
-            Allow Sale
-          </label>
-        </div>
-
-        @if ( addProductForm.get('blisterPacks')?.get('enabled')?.value ) {
-
-        <!-- BlisterPacksByBox -->
-        <div class="md:col-span-2">
-
-          <label class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary mb-1 block">
-            Blister Pack By Box
-          </label>
-          <input formControlName="blisterPackByBox" type="number" placeholder="Enter blister pack by box"
-            class="block w-full border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-light-primary dark:text-text-dark-primary focus:ring-2 focus:ring-primary/70 focus:border-primary outline-none px-3 py-2 transition-all" />
-        </div>
-
-        <!-- Price -->
-        <div class="md:col-span-2">
-          <label class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary mb-1 block">
-            Price
-          </label>
-          <input formControlName="price" type="number" placeholder="Enter price"
-            class="block w-full border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-light-primary dark:text-text-dark-primary focus:ring-2 focus:ring-primary/70 focus:border-primary outline-none px-3 py-2 transition-all" />
-        </div>
-        }
-
-      </div>
-
-      }
-
-      <div formGroupName="units"
-        class="p-5 border border-border-light dark:border-border-dark bg-background-light/50 dark:bg-background-dark/50 grid grid-cols-1 md:grid-cols-5 gap-6 items-center shadow-sm transition-colors duration-300">
-
-        <h3 class="text-lg font-semibold text-text-light-primary dark:text-text-dark-primary mb-4 md:col-span-4">
-          Units</h3>
-
-        <!-- Allow Sale -->
-        <div class="flex items-center gap-3 md:col-span-1">
-          <input formControlName="enabled" id="allow-sale" type="checkbox"
-            class="h-5 w-5 rounded accent-primary cursor-pointer border-border-light dark:border-border-dark text-primary focus:ring-primary" />
-          <label for="allow-sale"
-            class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary cursor-pointer select-none">
-            Allow Sale
-          </label>
-        </div>
-
-        @if ( addProductForm.get('units')?.get('enabled')?.value ) {
-
-        <!-- Unit By -->
-        <div class="md:col-span-2">
-
-          <label class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary mb-1 block">
-            Unit By
-          </label>
-          <input formControlName="unitBy" type="number" placeholder="Enter unit by"
-            class="block w-full border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-light-primary dark:text-text-dark-primary focus:ring-2 focus:ring-primary/70 focus:border-primary outline-none px-3 py-2 transition-all" />
-        </div>
-
-
-        <!-- Price -->
-        <div class="md:col-span-2">
-          <label class="text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary mb-1 block">
-            Price
-          </label>
-          <input formControlName="price" type="number" placeholder="Enter price"
-            class="block w-full border border-border-light dark:border-border-dark bg-background-light dark:bg-background-dark text-text-light-primary dark:text-text-dark-primary focus:ring-2 focus:ring-primary/70 focus:border-primary outline-none px-3 py-2 transition-all" />
-        </div>
-        }
-
-      </div>
     </div>
   </div>
 
