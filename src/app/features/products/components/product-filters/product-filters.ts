@@ -1,41 +1,37 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms'
+import { Component, EventEmitter, output, Output, signal } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
-export type StockStatus = 'any' | 'in_stock' | 'low' | 'out';
+export type Status = 'any' | 'active' | 'inactive';
 
 export interface ProductFiltersInterface {
   query: string;
-  category: string;
-  supplier: string;
-  stockStatus: StockStatus;
+  laboratory: string;
+  status: Status;
 }
-
 
 @Component({
   selector: 'app-product-filters',
   imports: [CommonModule, FormsModule],
   templateUrl: './product-filters.html',
-  styleUrl: './product-filters.css'
+  styleUrl: './product-filters.css',
 })
 export class ProductFilters {
   // estado local con Signals
   query = signal('');
-  category = signal('any');
-  supplier = signal('any');
-  stockStatus = signal<StockStatus>('any');
+  laboratory = signal('any');
+  status = signal<Status>('any');
 
-  @Output() filtersChange = new EventEmitter<ProductFiltersInterface>();
+  filtersChange = output<ProductFiltersInterface>();
 
   private debounceTimer: ReturnType<typeof setTimeout> | null = null;
   private readonly DEBOUNCE_MS = 250;
 
   private emitFilters() {
     this.filtersChange.emit({
-      query: this.query(),         // 👈 obtener el valor, no el signal
-      category: this.category(),
-      supplier: this.supplier(),
-      stockStatus: this.stockStatus(),
+      query: this.query(),
+      laboratory: this.laboratory(),
+      status: this.status(),
     });
   }
 
@@ -47,6 +43,10 @@ export class ProductFilters {
     }, this.DEBOUNCE_MS);
   }
 
+  onFilterChange() {
+    this.applyNow();
+  }
+
   applyNow() {
     if (this.debounceTimer) clearTimeout(this.debounceTimer);
     this.emitFilters();
@@ -54,9 +54,8 @@ export class ProductFilters {
 
   reset() {
     this.query.set('');
-    this.category.set('any');
-    this.supplier.set('any');
-    this.stockStatus.set('any');
+    this.laboratory.set('any');
+    this.status.set('any');
     this.applyNow();
   }
 }

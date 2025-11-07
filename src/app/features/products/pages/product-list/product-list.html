@@ -6,6 +6,11 @@
     <app-button (click)="onAddProduct()" label="Add Product" icon="add_circle"/>
   </div>
 
-  <app-product-filters />
+  <app-product-filters (filtersChange)="onFiltersChange($event)" />
   <app-product-table [productsList]="productsList()" />
+  <app-pagination
+    [currentPage]="currentPage()"
+    [totalItems]="totalItems()"
+    (pageChange)="onPageChange($event)">
+</app-pagination>
 </main>

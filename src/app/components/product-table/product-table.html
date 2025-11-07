@@ -30,9 +30,15 @@
         <td class="px-6 py-4 text-text-light-secondary dark:text-text-dark-secondary">{{ product.requiresPrescription ? 'Yes' : 'No' }}</td>
 
         <td class="px-6 py-4">
-          <button class="font-medium text-primary hover:text-primary/80">View Details</button>
+          <button (click)="onViewInInventory(product.id || 0)" class="font-medium text-primary hover:text-primary/80">Ver en inventario</button>
         </td>
       </tr>
+      } @empty {
+        <tr>
+          <td [attr.colspan]="tableHeaders.length" class="text-center py-8 text-text-light-secondary dark:text-text-dark-secondary">
+            No se encontraron resultados.
+          </td>
+        </tr>
       }
     </tbody>
   </table>
