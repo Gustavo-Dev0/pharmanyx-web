@@ -7,6 +7,7 @@ import { ProductFormComponent } from '../../components/product-form/product-form
 import { Product } from '../../../../domain/products/models/product.model';
 import { ProductService } from '../../../../domain/products/services/product.service';
 import { PaginationComponent } from '../../../../shared/components/pagination/pagination';
+import { ToastService } from '../../../../core/services/toast.service';
 
 @Component({
   selector: 'app-product-list',
@@ -21,7 +22,7 @@ export class ProductList {
   totalItems = signal(0);
   filters = signal<ProductFiltersInterface | undefined>(undefined);
 
-  constructor(private dialog: Dialog, private productService: ProductService) {}
+  constructor(private dialog: Dialog, private productService: ProductService, private toastService: ToastService) {}
 
   ngOnInit() {
     this.loadProducts();
@@ -38,7 +39,10 @@ export class ProductList {
   async onAddProduct() {
 
     const result = await this.dialog.open(ProductFormComponent, "Add Product");
-    if(result.success) this.loadProducts();
+    if(result.success) {
+      this.loadProducts();
+      this.toastService.success("Product added successfully");
+    }
 
   }
 
