@@ -81,13 +81,13 @@ export class ProductFormComponent {
       const product: Product = this.addProductForm.value;
       console.log(product);
 
-      /* this.productService.save(product).subscribe((res) => {
+      this.productService.save(product).subscribe((res) => {
         console.log(res);
         const closeFn = this.onClose();
         if (closeFn) {
           closeFn({ success: true });
         }
-      }); */
+      });
     }
   }
 }
