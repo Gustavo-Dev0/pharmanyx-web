@@ -2,8 +2,8 @@ import { Component, EventEmitter, input, output } from '@angular/core';
 
 @Component({
   selector: 'app-pagination',
-  templateUrl: './pagination.html',
-  styleUrls: ['./pagination.css']
+  templateUrl: './pagination.component.html',
+  styleUrls: ['./pagination.component.css']
 })
 export class PaginationComponent {
   currentPage = input<number>(1);

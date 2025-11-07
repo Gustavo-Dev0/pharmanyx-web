@@ -6,7 +6,7 @@ import { Dialog } from '../../../../core/services/dialog';
 import { ProductFormComponent } from '../../components/product-form/product-form.component';
 import { Product } from '../../../../domain/products/models/product.model';
 import { ProductService } from '../../../../domain/products/services/product.service';
-import { PaginationComponent } from '../../../../shared/components/pagination/pagination';
+import { PaginationComponent } from '../../../../shared/components/pagination/pagination.component';
 import { ToastService } from '../../../../core/services/toast.service';
 
 @Component({
@@ -20,6 +20,7 @@ export class ProductList {
   productsList = signal<Product[]>([]);
   currentPage = signal(1);
   totalItems = signal(0);
+  itemsPerPage = signal(20);
   filters = signal<ProductFiltersInterface | undefined>(undefined);
 
   constructor(private dialog: Dialog, private productService: ProductService, private toastService: ToastService) {}
@@ -33,6 +34,7 @@ export class ProductList {
     this.productService.getAll(this.filters(), this.currentPage()).subscribe((response) => {
       this.productsList.set(response.content);
       this.totalItems.set(response.totalElements);
+      this.itemsPerPage.set(response.pageable.pageSize);
     });
   }
 
