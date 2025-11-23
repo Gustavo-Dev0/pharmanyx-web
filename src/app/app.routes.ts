@@ -7,8 +7,9 @@ export const routes: Routes = [
     path: '',
     component: MainLayout,
     children: [
-      { path: '', loadComponent: () => import('./features/dashboard/dashboard').then((m) => m.Dashboard)},
+      { path: '', loadComponent: () => import('./features/dashboard/dashboard').then((m) => m.Dashboard) },
       { path: 'products', loadChildren: () => import('./features/products/product.routes').then((m) => m.routes) },
+      { path: 'settings', loadChildren: () => import('./features/settings/settings.routes').then((m) => m.routes) },
     ],
   },
   {

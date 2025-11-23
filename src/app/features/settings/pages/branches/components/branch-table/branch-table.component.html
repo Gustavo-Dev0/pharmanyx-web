@@ -1,0 +1,53 @@
+<div
+    class="bg-content-light dark:bg-content-dark rounded-lg border border-border-light dark:border-border-dark overflow-hidden">
+    <table class="w-full text-sm">
+        <thead class="bg-background-light dark:bg-background-dark">
+            <tr>
+                @for (head of tableHeaders; track head) {
+                <th
+                    class="px-6 py-3 text-left font-medium text-text-light-secondary dark:text-text-dark-secondary tracking-wider">
+                    {{ head }}
+                </th>
+                }
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-border-light dark:divide-border-dark">
+            @for ( branch of branchesList(); track branch.id ) {
+            <tr class="hover:bg-background-light dark:hover:bg-background-dark">
+                <td class="px-6 py-4 font-medium text-text-light-primary dark:text-text-dark-primary">{{ branch.name }}
+                </td>
+                <td class="px-6 py-4 text-text-light-secondary dark:text-text-dark-secondary">{{ branch.address }}</td>
+                <td class="px-6 py-4 text-text-light-secondary dark:text-text-dark-secondary">{{ branch.phone }}</td>
+                <td class="px-6 py-4">
+                    <span class="px-2 py-1 text-xs font-medium rounded-full"
+                        [class.bg-green-100]="branch.status === 'Active'"
+                        [class.text-green-800]="branch.status === 'Active'"
+                        [class.dark:bg-green-900]="branch.status === 'Active'"
+                        [class.dark:text-green-300]="branch.status === 'Active'"
+                        [class.bg-red-100]="branch.status === 'Inactive'"
+                        [class.text-red-800]="branch.status === 'Inactive'"
+                        [class.dark:bg-red-900]="branch.status === 'Inactive'"
+                        [class.dark:text-red-300]="branch.status === 'Inactive'">
+                        {{ branch.status }}
+                    </span>
+                </td>
+                <td class="px-6 py-4">
+                    <div class="flex gap-4">
+                        <button (click)="onView(branch)"
+                            class="font-medium text-blue-600 dark:text-blue-500 hover:underline">View</button>
+                        <button (click)="onEdit(branch)"
+                            class="font-medium text-primary hover:text-primary/80">Edit</button>
+                    </div>
+                </td>
+            </tr>
+            } @empty {
+            <tr>
+                <td [attr.colspan]="tableHeaders.length"
+                    class="text-center py-8 text-text-light-secondary dark:text-text-dark-secondary">
+                    No branches found.
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>

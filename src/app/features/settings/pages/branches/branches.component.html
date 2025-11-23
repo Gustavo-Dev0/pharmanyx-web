@@ -1,0 +1,14 @@
+<main class="flex-1 p-8">
+    <div class="flex justify-between items-center mb-6">
+        <p class="text-sm text-text-light-secondary dark:text-text-dark-secondary">
+            Manage your branch locations, including addresses and contact information.
+        </p>
+        <app-button (click)="onAddBranch()" label="Add Branch" icon="add_circle" />
+    </div>
+
+    <app-branch-filters (filtersChange)="onFiltersChange($event)" />
+    <app-branch-table [branchesList]="branchesList()" (view)="onViewBranch($event)" (edit)="onEditBranch($event)" />
+    <app-pagination [currentPage]="currentPage()" [totalItems]="totalItems()" [itemsPerPage]="itemsPerPage()"
+        (pageChange)="onPageChange($event)">
+    </app-pagination>
+</main>

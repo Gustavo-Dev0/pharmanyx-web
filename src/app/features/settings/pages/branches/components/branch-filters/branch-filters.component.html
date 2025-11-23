@@ -1,0 +1,27 @@
+<div class="flex items-center gap-4 mb-6">
+    <!-- Search -->
+    <div class="relative w-full max-w-sm">
+        <span
+            class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-light-secondary dark:text-text-dark-secondary">search</span>
+        <input [(ngModel)]="query" (ngModelChange)="onInputChange()"
+            class="w-full h-10 pl-10 pr-4 rounded-DEFAULT bg-content-light dark:bg-content-dark border border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary placeholder:text-text-light-secondary dark:placeholder:text-text-dark-secondary focus:outline-none focus:ring-2 focus:ring-primary"
+            placeholder="Search by name, address, or phone" type="text" />
+    </div>
+
+    <!-- Status Filter -->
+    <div class="relative w-full max-w-xs">
+        <select [(ngModel)]="status" (ngModelChange)="onFilterChange()"
+            class="w-full h-10 px-4 rounded-DEFAULT bg-content-light dark:bg-content-dark border border-border-light dark:border-border-dark text-text-light-primary dark:text-text-dark-primary focus:outline-none focus:ring-2 focus:ring-primary">
+            <option value="any">Any Status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+        </select>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex items-center gap-2">
+        <button (click)="applyNow()" class="h-10 px-4 rounded-DEFAULT bg-primary text-white text-sm">Apply</button>
+        <button (click)="reset()"
+            class="h-10 px-4 rounded-DEFAULT border border-border-light dark:border-border-dark bg-content-light dark:bg-content-dark text-sm text-text-light-secondary">Reset</button>
+    </div>
+</div>
