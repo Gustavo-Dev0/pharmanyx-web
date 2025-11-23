@@ -48,6 +48,19 @@ export class ProductList {
 
   }
 
+  async onEditProduct(product: Product) {
+    const result = await this.dialog.open(ProductFormComponent, "Edit Product", { product });
+    if(result.success) {
+      this.loadProducts();
+      this.toastService.success(`Product ${result.data.name} updated successfully`);
+    }
+  }
+
+  async onViewProduct(product: Product) {
+    console.log(product);
+    await this.dialog.open(ProductFormComponent, "View Product", { product, isReadOnly: true });
+  }
+
   onFiltersChange(filters: ProductFiltersInterface) {
     this.filters.set(filters);
     this.currentPage.set(1);

@@ -1,5 +1,5 @@
 import { NgFor } from '@angular/common';
-import { Component, inject, input } from '@angular/core';
+import { Component, EventEmitter, inject, input, Output } from '@angular/core';
 import { Product } from '../../domain/products/models/product.model';
 import { JsonPipe } from '@angular/common';
 import { Router } from '@angular/router';
@@ -18,14 +18,15 @@ export class ProductTable {
 
   productsList = input.required<Product[]>();
 
-  /* products = signal([
-    { name: 'Pain Relief Tablets', category: 'Analgesics', supplier: 'MediCorp', stock: 75, price: 9.99 },
-    { name: 'Antibiotic Capsules', category: 'Antibiotics', supplier: 'HealthPlus', stock: 20, price: 14.5 },
-    { name: 'Allergy Medication', category: 'Antihistamines', supplier: 'AllergoMed', stock: 90, price: 12.75 },
-  ]); */
+  @Output() edit = new EventEmitter<Product>();
+  @Output() view = new EventEmitter<Product>();
 
-  updateProducts(){
-    window.URL.canParse("sec")
+  onEdit(product: Product) {
+    this.edit.emit(product);
+  }
+
+  onView(product: Product) {
+    this.view.emit(product);
   }
 
   onViewInInventory(id: number) {

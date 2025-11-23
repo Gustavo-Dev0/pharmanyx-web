@@ -52,21 +52,24 @@
       <h4 class="text-lg font-semibold text-text-light-primary dark:text-text-dark-primary">
         Presentations
       </h4>
-      <button type="button" (click)="addPresentation()" class="px-3 py-1 text-sm font-medium text-white bg-primary rounded-DEFAULT hover:bg-primary/90">
+      @if (!isReadOnly()) {
+      <button type="button" (click)="addPresentation()"
+        class="px-3 py-1 text-sm font-medium text-white bg-primary rounded-DEFAULT hover:bg-primary/90">
         Add Presentation
       </button>
+      }
     </div>
 
     <div formArrayName="presentations" class="space-y-4">
-      @for (presentation of presentations.controls; track presentation; let i = $index) {
+      @for (presentation of presentations.controls; track $index) {
       <div [formGroupName]="$index"
         class="p-5 border border-border-light dark:border-border-dark bg-background-light/50 dark:bg-background-dark/50 grid grid-cols-1 md:grid-cols-3 gap-6 items-center shadow-sm transition-colors duration-300 relative">
 
         <div class="md:col-span-3 flex justify-between items-center">
           <h3 class="text-lg font-semibold text-text-light-primary dark:text-text-dark-primary">Presentation #{{$index +
             1}}</h3>
-          @if (presentations.length > 1) {
-          <button type="button" (click)="removePresentation(i)" class="text-red-500 hover:text-red-700">
+          @if (presentations.length > 1 && !isReadOnly()) {
+          <button type="button" (click)="removePresentation($index)" class="text-red-500 hover:text-red-700">
             Remove
           </button>
           }
@@ -150,8 +153,10 @@
       }
     </div>
   </div>
+
 </form>
 
+@if (!isReadOnly()) {
 <div class="flex justify-end gap-4 p-6 border-t border-border-light dark:border-border-dark">
   <button
     class="px-4 py-2 text-sm font-medium text-text-light-secondary dark:text-text-dark-secondary rounded-DEFAULT border border-border-light dark:border-border-dark hover:bg-primary/10">Cancel</button>
@@ -159,3 +164,4 @@
     (click)="onSubmit()">Save
     Product</button>
 </div>
+}

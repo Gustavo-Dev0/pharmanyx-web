@@ -13,6 +13,9 @@ import { ResultModal } from '../../../../shared/components/modal/modal';
 export class ProductFormComponent {
   addProductForm!: FormGroup;
   onClose = input<(result: ResultModal) => void>();
+  product = input<Product | undefined>();
+  isReadOnly = input<boolean>(false);
+  isEditMode = computed(() => !!this.product());
 
   basicFields = [
     { name: 'code', label: 'Code', type: 'text', placeholder: 'Enter product code', validators: [Validators.required] },
@@ -33,24 +36,36 @@ export class ProductFormComponent {
   constructor(private fb: FormBuilder, private productService: ProductService) { }
 
   ngOnInit() {
+    const productData = this.product();
     const group: any = {};
     this.basicFields.forEach(field => {
-      group[field.name] = this.fb.control(field.type === 'checkbox' ? false : null, field.validators || []);
+        const initialValue = productData ? productData[field.name as keyof Product] : (field.type === 'checkbox' ? false : null);
+        group[field.name] = this.fb.control(initialValue, field.validators || []);
     });
+
+    const presentationsFGs = productData?.presentations?.map(p => this.createPresentationGroup(p)) || [this.createPresentationGroup()];
 
     this.addProductForm = this.fb.group({
       ...group,
-      presentations: this.fb.array([this.createPresentationGroup()])
+      presentations: this.fb.array(presentationsFGs)
     });
+
+    if (this.isEditMode()) {
+        this.addProductForm.addControl('id', this.fb.control(productData?.id));
+    }
+
+    if (this.isReadOnly()) {
+      this.addProductForm.disable();
+    }
   }
 
-  createPresentationGroup(): FormGroup {
+  createPresentationGroup(presentation?: any): FormGroup {
     return this.fb.group({
-      type: ['BOX', Validators.required],
-      description: ['', Validators.required],
-      conversionFactor: [1, [Validators.required, Validators.min(1)]],
-      salePrice: [null, [Validators.required, Validators.min(0)]],
-      allowsSale: [true]
+      type: [presentation?.type || 'BOX', Validators.required],
+      description: [presentation?.description || '', Validators.required],
+      conversionFactor: [presentation?.conversionFactor || 1, [Validators.required, Validators.min(1)]],
+      salePrice: [presentation?.salePrice || null, [Validators.required, Validators.min(0)]],
+      allowsSale: [presentation?.allowsSale ?? true]
     });
   }
 
@@ -79,13 +94,16 @@ export class ProductFormComponent {
     this.addProductForm.markAllAsTouched();
     if (this.addProductForm.valid) {
       const product: Product = this.addProductForm.value;
-      console.log(product);
+      
+      const operation = this.isEditMode()
+        ? this.productService.update(product)
+        : this.productService.save(product);
 
-      this.productService.save(product).subscribe((res) => {
+      operation.subscribe((res) => {
         console.log(res);
         const closeFn = this.onClose();
         if (closeFn) {
-          closeFn({ success: true });
+          closeFn({ success: true, data: product });
         }
       });
     }

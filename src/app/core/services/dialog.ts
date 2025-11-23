@@ -10,7 +10,7 @@ export class Dialog {
     private injector: EnvironmentInjector
   ) { }
 
-  open<T>(component: Type<T>, title = ''): Promise<any> {
+  open<T>(component: Type<T>, title = '', data: any = {}): Promise<any> {
     return new Promise((resolve) => {
       if (this.modalRef) return; // evita múltiples modales
 
@@ -29,6 +29,12 @@ export class Dialog {
       const contentRef = createComponent(component, {
         environmentInjector: this.injector,
       });
+
+      for (const key in data) {
+        if (data.hasOwnProperty(key)) {
+          contentRef.setInput(key, data[key]);
+        }
+      }
 
       contentRef.setInput('onClose', (result: any) => {
         console.log(result);

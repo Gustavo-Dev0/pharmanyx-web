@@ -30,7 +30,11 @@
         <td class="px-6 py-4 text-text-light-secondary dark:text-text-dark-secondary">{{ product.requiresPrescription ? 'Yes' : 'No' }}</td>
 
         <td class="px-6 py-4">
-          <button (click)="onViewInInventory(product.id || 0)" class="font-medium text-primary hover:text-primary/80">Ver en inventario</button>
+          <div class="flex gap-4">
+            <button (click)="onView(product)" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">View</button>
+            <button (click)="onEdit(product)" class="font-medium text-primary hover:text-primary/80">Edit</button>
+            <button (click)="onViewInInventory(product.id || 0)" class="font-medium text-primary hover:text-primary/80">Ver en inventario</button>
+          </div>
         </td>
       </tr>
       } @empty {

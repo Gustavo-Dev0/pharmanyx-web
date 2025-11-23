@@ -7,7 +7,7 @@
   </div>
 
   <app-product-filters (filtersChange)="onFiltersChange($event)" />
-  <app-product-table [productsList]="productsList()" />
+  <app-product-table [productsList]="productsList()" (view)="onViewProduct($event)" (edit)="onEditProduct($event)" />
   <app-pagination
     [currentPage]="currentPage()"
     [totalItems]="totalItems()"
