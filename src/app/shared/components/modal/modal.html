@@ -1,0 +1,15 @@
+<div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" ><!--  (click)="onClose()"> -->
+  <div class="bg-content-light dark:bg-content-dark rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] flex flex-col" (click)="$event.stopPropagation()">
+    <div class="flex items-center justify-between p-6 border-b border-border-light dark:border-border-dark">
+      <h3 class="text-xl font-semibold text-text-light-primary dark:text-text-dark-primary">{{ title() }}
+      </h3>
+      <button (click)="onClose({ success: false })"
+        class="p-2 rounded-full text-text-light-secondary dark:text-text-dark-secondary hover:bg-primary/10 hover:text-text-light-primary dark:hover:text-text-dark-primary">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+
+    <div class="modal-content"></div>
+
+  </div>
+</div>

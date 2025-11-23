@@ -1,0 +1,10 @@
+<div class="toast-container">
+  @for (toast of toasts$ | async; track toast.id) {
+    <div [class]="getToastClasses(toast)">
+      <div class="toast-message">{{ toast.message }}</div>
+      @if (toast.persistent) {
+        <button class="toast-close-btn" (click)="remove(toast.id)">&times;</button>
+      }
+    </div>
+  }
+</div>

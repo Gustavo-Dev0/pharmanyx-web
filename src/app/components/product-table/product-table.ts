@@ -1,20 +1,35 @@
 import { NgFor } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, EventEmitter, inject, input, Output } from '@angular/core';
+import { Product } from '../../domain/products/models/product.model';
+import { JsonPipe } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-table',
-  imports: [NgFor],
+  imports: [JsonPipe],
   templateUrl: './product-table.html',
   styleUrl: './product-table.css'
 })
 export class ProductTable {
-  products = signal([
-    { name: 'Pain Relief Tablets', category: 'Analgesics', supplier: 'MediCorp', stock: 75, price: 9.99 },
-    { name: 'Antibiotic Capsules', category: 'Antibiotics', supplier: 'HealthPlus', stock: 20, price: 14.5 },
-    { name: 'Allergy Medication', category: 'Antihistamines', supplier: 'AllergoMed', stock: 90, price: 12.75 },
-  ]);
 
-  updateProducts(){
-    window.URL.canParse("sec")
+  private router = inject(Router);
+
+  tableHeaders = ['Product Code', 'Product Name','Laboratory','Sanitary Registry','Purchase Price','Requires Prescription','Actions'];
+
+  productsList = input.required<Product[]>();
+
+  @Output() edit = new EventEmitter<Product>();
+  @Output() view = new EventEmitter<Product>();
+
+  onEdit(product: Product) {
+    this.edit.emit(product);
+  }
+
+  onView(product: Product) {
+    this.view.emit(product);
+  }
+
+  onViewInInventory(id: number) {
+    /* this.router.navigate(['/inventory', id]); */
   }
 }
